@@ -15,6 +15,12 @@ FenceID fence = createFence(FENCE_OAK);
 RailID rail = createRail(RAIL);
 TorchID torch = createTorch();
 
+BlockID glowstone = createBlock(BLOCK_GLOWSTONE);
+BlockID dirt = createBlock(BLOCK_DIRT);
+BlockID air = createBlock(BLOCK_AIR);
+BlockID black_concrete = createConcrete(COLOR_BLACK, 1);
+BlockID glass = createBlock(BLOCK_GLASS);
+
 OreID gold = createOre(ORE_GOLD);
 OreID iron = createOre(ORE_IRON);
 OreID diamond = createOre(ORE_DIAMOND);
@@ -321,6 +327,187 @@ void stage_5(int x, int y, int z)
 	locate_circle(x, y, z, 10, water);
 }
 
+
+void locate_elevator(int x, int y, int z)
+{
+	for (int h = 0; h <= 243; h++)
+	{
+		locateBlock(glass, x + 1, y + h, z);
+		locateBlock(glass, x - 1, y + h, z);
+		locateBlock(glass, x, y + h, z - 1);
+		locateBlock(glass, x, y + h, z + 1);
+	}
+	for (int h = 0; h <= 243; h+=2) 
+	{
+		locateWater(water, x, y + h, z);
+	}
+}
+
+void locate_cube(int x, int y, int z, int l ,int r,int direction, BlockID block)
+{
+	if (direction == 0) {
+		for (int i = 0; i < l; i++)
+		{
+			for (int k = 0; k < r; k++)
+			{
+				for (int m = 0; m < r; m++)
+				{
+					locateBlock(block, x + i, y + k, z + m);
+				}
+			}
+		}
+	}
+	else {
+		for (int i = 0; i < l; i++)
+		{
+			for (int k = 0; k < r; k++)
+			{
+				for (int m = 0; m < r; m++)
+				{
+					locateBlock(block, x + m, y + k, z + i);
+				}
+			}
+		}
+	}
+}
+
+void 판(int a, int b, int c, int r, BlockID block)
+
+{
+	for (int x = 0; x < r; x++)  //판
+	{
+		for (int z = 0; z < r; z++)
+		{
+			locateBlock(block, a + x, b, c + z);
+		}
+	}
+}
+
+void 기본틀(int x, int y, int z, int r, BlockID block)
+{
+	판(x, y, z, r, block);
+	for (int k = 0; k < 245; k++) {
+		for (int i = 0; i < r; i++)
+		{
+			locateBlock(block, x + i, y + k, z);
+		}
+		for (int i = 0; i < r; i++)
+		{
+			locateBlock(block, x + i, y + k, z + r);
+		}
+		for (int i = 0; i < r; i++)
+		{
+			locateBlock(block, x, y + k, z + i);
+		}
+		for (int i = 0; i < r; i++)
+		{
+			locateBlock(block, x + r, y + k, z + i);
+		}
+	}
+}
+
+void locate_heart(int x, int y, int z, BlockID block)
+{
+	int arr[59][2] = {        {8,2}, {8,3},               {8,6}, {8,7},
+					   {7,1}, {7,2}, {7,3}, {7,4}, {7,5}, {7,6}, {7,7}, {7,8},
+				{6,0}, {6,1}, {6,2}, {6,3}, {6,4}, {6,5}, {6,6}, {6,7}, {6,8}, {6,9}, {6,10},
+				{5,0}, {5,1}, {5,2}, {5,3}, {5,4}, {5,5}, {5,6}, {5,7}, {5,8}, {5,9}, {5,10},
+					   {4,1}, {4,2}, {4,3}, {4,4}, {4,5}, {4,6}, {4,7}, {4,8}, {4,9},
+							  {3,2}, {3,3}, {3,4}, {3,5}, {3,6}, {3,7}, {3,8},
+									 {2,3}, {2,4}, {2,5}, {2,6}, {2,7},
+											{1,4}, {1,5}, {1,6},
+												   {0,5} };
+	for (int i = 0; i <= 59; i++)
+	{
+		locateBlock(block, x + arr[i][0], y, z + arr[i][1]);
+	}
+}
+
+void locate_diamond(int x, int y, int z, BlockID block)
+{
+	int arr[64][2] = {                            {15,3},               
+										   		  {14,3},
+					                      {13,2}, {13,3}, {13,4},
+					                      {12,2}, {12,3}, {12,4},
+					              {11,1}, {11,2}, {11,3}, {11,4}, {11,5},
+					              {10,1}, {10,2}, {10,3}, {10,4}, {10,5},
+					       {9,0}, {9,1},  {9,2},  {9,3},  {9,4},  {9,5}, {9,6}, 
+					       {8,0}, {8,1},  {8,2},  {8,3},  {8,4},  {8,5}, {8,6},
+					       {7,0}, {7,1},  {7,2},  {7,3},  {7,4},  {7,5}, {7,6},
+					       {6,0}, {6,1},  {6,2},  {6,3},  {6,4},  {6,5}, {6,6},
+					              {5,1},  {5,2},  {5,3},  {5,4},  {5,5},
+					              {4,1},  {4,2},  {4,3},  {4,4},  {4,5},
+				 	                      {3,2},  {3,3},  {3,4},
+					                      {2,2},  {2,3},  {2,4},
+					                              {1,3},
+					                              {0,3}};
+	for (int i = 0; i < 64 ;i++)
+	{
+		locateBlock(block, x + arr[i][0], y, z + arr[i][1]);
+	}
+}
+
+void locate_space(int x, int y, int z, BlockID block)
+{
+	int arr[63][2] = {                                           { 10,5 },
+														{ 9,4 }, { 9,5 }, { 9,6 },
+											   { 8,3 }, { 8,4 }, { 8,5 }, { 8,6 }, { 8,7 },
+									  { 7,2 }, { 7,3 }, { 7,4 }, { 7,5 }, { 7,6 }, { 7,7 }, { 7,8 },
+							 { 6,1 }, { 6,2 }, { 6,3 }, { 6,4 }, { 6,5 }, { 6,6 }, { 6,7 }, { 6,8 }, { 6,9 },
+					{ 5,0 }, { 5,1 }, { 5,2 }, { 5,3 }, { 5,4 }, { 5,5 }, { 5,6 }, { 5,7 }, { 5,8 }, { 5,9 }, { 5,10 },
+					{ 4,0 }, { 4,1 }, { 4,2 }, { 4,3 }, { 4,4 }, { 4,5 }, { 4,6 }, { 4,7 }, { 4,8 }, { 4,9 }, { 4,10 },
+							 { 3,1 }, { 3,2 }, { 3,3 },          { 3,5 },          { 3,7 }, { 3,8 }, { 3,9 },
+																 { 2,5 },
+														{ 1,4 }, { 1,5 }, { 1,6 },
+											   { 0,3 }, { 0,4 }, { 0,5 }, { 0,6 }, { 0,7 } };
+	
+	for (int i = 0; i < 63; i++)
+	{
+		locateBlock(block, x + arr[i][0], y, z + arr[i][1]);
+	}
+}
+
+void locate_clover(int x, int y, int z, BlockID block)
+{
+	int arr[88][2] = {                                     {11,5}, {11,6}, {11,7},
+						                            {10,4},{10,5}, {10,6}, {10,7}, {10,8},
+						                            {9,4}, {9,5},  {9,6},  {9,7},  {9,8},
+						                            {8,4}, {8,5},  {8,6},  {8,7},  {8,8},
+						       {7,1}, {7,2}, {7,3},        {7,5},  {7,6},  {7,7},          {7,9}, {7,10}, {7,11},
+						{6,0}, {6,1}, {6,2}, {6,3}, {6,4}, {6,5},  {6,6},  {6,7},  {6,8},  {6,9}, {6,10}, {6,11}, {6,12},
+						{5,0}, {5,1}, {5,2}, {5,3}, {5,4}, {5,5},  {5,6},  {5,7},  {5,8},  {5,9}, {5,10}, {5,11}, {5,12},
+						{4,0}, {4,1}, {4,2}, {4,3}, {4,4}, {4,5},  {4,6},  {4,7},  {4,8},  {4,9}, {4,10}, {4,11}, {4,12},
+						       {3,1}, {3,2}, {3,3},                {3,6},                  {3,9}, {3,10}, {3,11},
+						                                   {2,5},  {2,6},  {2,7}, 	   		   
+						                            {1,4}, {1,5},  {1,6},  {1,7},  {1,8},
+						                     {0,3}, {0,4}, {0,5},  {0,6},  {0,7},  {0,8}, {0,9}	};
+
+	for (int i = 0; i < 88; i++)
+	{
+		locateBlock(block, x + arr[i][0], y, z + arr[i][1]);
+	}
+}
+
+void stage_1(int x, int y, int z)
+{
+	기본틀(x - 22, y, z - 22, 45, black_concrete);
+
+	for (int h = 40; h <= 200; h += 40)
+	{
+		판(x - 21, y + h, z - 21, 43, black_concrete);
+	}
+	int holl_location[6] = { 1,3,2,0,1,0 };
+	for (int h = 0;h<6;h++) 
+	{
+		int location[4][3] = { {x + 1, y + (h + 1) * 40, z + 1}, {x + 1, y + (h + 1) * 40, z - 20}, {x - 20, y + (h + 1) * 40, z - 20}, {x - 20, y + (h + 1) * 40, z + 1} };
+		locate_clover(location[h % 4][0] + 5       , location[h % 4][1] - 40      , location[h % 4][2] + 4      , glowstone);
+		locate_heart  (location[(h + 1) % 4][0] + 4, location[(h + 1) % 4][1] - 40, location[(h + 1) % 4][2] + 5, glowstone);
+		locate_diamond(location[(h + 2) % 4][0] + 2, location[(h + 2) % 4][1] - 40, location[(h + 2) % 4][2] + 7, glowstone);
+		locate_space  (location[(h + 3) % 4][0] + 5, location[(h + 3) % 4][1] - 40, location[(h + 3) % 4][2] + 5, glowstone);
+		판(location[h % 4][0], location[h % 4][1], location[h % 4][2], 20, air);
+	}
+	판(x-1,y + 1,z-1,3,water);
+}
 int main()
 {
 	locate_rail(0, 20, 0, 1, 0);
